@@ -20,9 +20,10 @@ void Tree::setRoot(TreeNode* node){
 	}
 }
 void Tree::insert(TreeNode* child, TreeNode* parent){
-	if (parent != nullptr){
-		parent->getChildren()->insertFirst(child);
-	}
+        if (parent != nullptr && child != nullptr){
+                child->setParent(parent);
+                parent->getChildren()->insertFirst(child);
+        }
 }
 
 void Tree::insert(int val, int val_parent){
