@@ -68,11 +68,14 @@ void TreeList::removeAll(){
 }
 
 TreeNode* TreeList::find(int val){
-	TreeListNode* ptr = head;
-	while ((ptr != nullptr) && ((ptr->getData())->getData() != val)){
-		ptr = ptr->getNext();
-	}
-	return ptr->getData();
+        TreeListNode* ptr = head;
+        while ((ptr != nullptr) && ((ptr->getData())->getData() != val)){
+                ptr = ptr->getNext();
+        }
+        if (ptr == nullptr){
+                return nullptr;
+        }
+        return ptr->getData();
 }
 
 bool TreeList::isEmpty(){
