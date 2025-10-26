@@ -14,20 +14,48 @@ namespace trees {
 
 class TreeNode;
 class TreeListNode;
+/**
+ * \brief Lista enlazada simple utilizada para almacenar los hijos de un nodo.
+ *
+ * La lista guarda punteros a TreeNode y ofrece operaciones básicas de inserción,
+ * búsqueda y eliminación.  Se usa internamente por TreeNode para modelar la
+ * relación padre-hijos.
+ */
 class TreeList {
 private:
-	TreeListNode* head;
+        /// Puntero al primer elemento de la lista.
+        TreeListNode* head;
+
 public:
-	TreeList();
-	TreeListNode* getHead();
-	void insertFirst(TreeNode* treeNode);
-	void removeFirst();
-	void remove(int val);
-	void removeAll();
-	bool isEmpty();
-	TreeNode* find(int val);
-	void print();
-	virtual ~TreeList();
+        /// Construye una lista vacía.
+        TreeList();
+
+        /// Devuelve el nodo inicial de la lista.
+        TreeListNode* getHead();
+
+        /// Inserta un nodo al inicio de la lista.
+        void insertFirst(TreeNode* treeNode);
+
+        /// Elimina el primer elemento de la lista.
+        void removeFirst();
+
+        /// Elimina cualquier nodo cuyo valor almacenado coincida con val.
+        void remove(int val);
+
+        /// Vacía por completo la lista, liberando cada TreeListNode.
+        void removeAll();
+
+        /// Indica si la lista está vacía.
+        bool isEmpty();
+
+        /// Busca un valor dentro de la lista y devuelve el TreeNode asociado.
+        TreeNode* find(int val);
+
+        /// Imprime en consola el valor de cada hijo almacenado.
+        void print();
+
+        /// Libera todos los recursos asociados a la lista.
+        virtual ~TreeList();
 };
 
 } /* namespace trees */

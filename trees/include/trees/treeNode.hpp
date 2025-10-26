@@ -13,21 +13,51 @@
 namespace trees {
 
 class TreeList;
+/**
+ * \brief Nodo individual del árbol general.
+ *
+ * Cada nodo conoce a su padre, el dato entero que almacena y la lista de hijos
+ * directos.  No se impone ninguna restricción en la cantidad de hijos que puede
+ * contener.
+ */
 class TreeNode {
 private:
-	TreeNode* parent;
-	int data; //data can be of any type
-	TreeList* children;
+        /// Referencia al nodo padre. Es nullptr para la raíz del árbol.
+        TreeNode* parent;
+
+        /// Valor almacenado en el nodo. Puede adaptarse a otro tipo si se requiere.
+        int data; // data can be of any type
+
+        /// Lista enlazada que mantiene los hijos inmediatos del nodo.
+        TreeList* children;
+
 public:
-	TreeNode();
-	TreeNode(int val);
-	void setParent(TreeNode* node);
-	void setData(int val);
-	void setChildren(TreeList* list);
-	TreeNode* getParent();
-	int getData();
-	TreeList* getChildren();
-	virtual ~TreeNode();
+        /// Construye un nodo sin dato definido y sin padre.
+        TreeNode();
+
+        /// Construye un nodo con el valor proporcionado.
+        explicit TreeNode(int val);
+
+        /// Actualiza la referencia al nodo padre.
+        void setParent(TreeNode* node);
+
+        /// Cambia el valor almacenado en el nodo.
+        void setData(int val);
+
+        /// Reemplaza la lista de hijos por una lista externa.
+        void setChildren(TreeList* list);
+
+        /// Obtiene el puntero al padre del nodo.
+        TreeNode* getParent();
+
+        /// Devuelve el valor almacenado.
+        int getData();
+
+        /// Recupera la lista de hijos inmediata.
+        TreeList* getChildren();
+
+        /// Libera los recursos del nodo y de sus descendientes.
+        virtual ~TreeNode();
 };
 
 } /* namespace trees */
