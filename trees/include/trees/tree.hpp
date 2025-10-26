@@ -13,19 +13,46 @@
 
 namespace trees {
 
+/**
+ * \brief Representa un árbol general (no binario) cuyos nodos almacenan enteros.
+ *
+ * La clase encapsula el puntero a la raíz y ofrece operaciones básicas para
+ * insertar hijos, buscar valores y recorrer el árbol.  Se apoya en las clases
+ * auxiliares TreeNode y TreeList para administrar los vínculos entre nodos y la
+ * lista de hijos de cada uno.
+ */
 class Tree {
 private:
-	TreeNode* root;
+        /// Puntero a la raíz del árbol. Puede ser nulo cuando el árbol está vacío.
+        TreeNode* root;
+
 public:
-	Tree();
-	void setRoot(TreeNode* node);
-	void insert(TreeNode* node, TreeNode* parent);
-	void insert(int child, int parent);
-	TreeNode* find_rec(int val, TreeNode* node);
-	TreeNode* find(int val);
-	void traverse_rec(TreeNode* node, int level);
-	void traverse();
-	virtual ~Tree();
+        /// Construye un árbol vacío inicializando la raíz a nullptr.
+        Tree();
+
+        /// Asigna la raíz del árbol si aún no se había establecido.
+        void setRoot(TreeNode* node);
+
+        /// Inserta un nodo hijo debajo de un nodo padre ya existente.
+        void insert(TreeNode* node, TreeNode* parent);
+
+        /// Crea un nodo hijo con el valor indicado e intenta insertarlo bajo el padre.
+        void insert(int child, int parent);
+
+        /// Búsqueda recursiva de un valor a partir de un nodo arbitrario.
+        TreeNode* find_rec(int val, TreeNode* node);
+
+        /// Busca un valor dentro del árbol empezando desde la raíz.
+        TreeNode* find(int val);
+
+        /// Recorre el árbol en preorden imprimiendo cada nivel con indentación.
+        void traverse_rec(TreeNode* node, int level);
+
+        /// Recorre el árbol completo desde la raíz.
+        void traverse();
+
+        /// Libera todos los recursos asociados al árbol y sus nodos.
+        virtual ~Tree();
 };
 
 } /* namespace trees */

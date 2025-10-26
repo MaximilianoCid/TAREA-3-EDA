@@ -10,30 +10,29 @@
 namespace trees {
 
 TreeListNode::TreeListNode(): data(), ptrNext(nullptr) {
-	// TODO Auto-generated constructor stub
-
+        // Inicializa el nodo de lista sin dato ni enlace.
 }
 
 TreeListNode::TreeListNode(TreeNode* _data,
-		TreeListNode* next) : data(_data), ptrNext(next){
-
+                TreeListNode* next) : data(_data), ptrNext(next){
+        // Constructor que permite dejar preconfigurados dato y siguiente.
 }
 void TreeListNode::setData(TreeNode* _data){
-	data = _data;
+        data = _data;
 }
 void TreeListNode::setNext(TreeListNode* _next){
-	ptrNext = _next;
+        ptrNext = _next;
 }
 TreeNode* TreeListNode::getData(){
-	return data;
+        return data;
 }
 TreeListNode* TreeListNode::getNext(){
-	return ptrNext;
+        return ptrNext;
 }
 
 TreeListNode::~TreeListNode() {
-	//Actions when a TreeListNode is deleted
-	delete data;
+        // Al liberar el nodo, también se libera el TreeNode que contiene.
+        delete data;
 }
 
 } /* namespace trees */
