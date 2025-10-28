@@ -10,91 +10,96 @@
 namespace trees {
 
 TreeList::TreeList(): head(nullptr) {
-	// TODO Auto-generated constructor stub
+        // La lista comienza vacía.
 }
 
-void TreeList::insertFirst(TreeNode* treeNode){
-	TreeListNode* node = new TreeListNode(treeNode);
-	if (head == nullptr) {
-		head = node;
-	}
-	else{
-		node->setNext(head);
-		head = node;
-	}
+void TreeList::insertarPrimero(TreeNode* treeNode){
+        // Inserta un nuevo TreeListNode al inicio.
+        TreeListNode* node = new TreeListNode(treeNode);
+        if (head == nullptr) {
+                head = node;
+        }
+        else{
+                node->establecerSiguiente(head);
+                head = node;
+        }
 }
 
-TreeListNode* TreeList::getHead(){
-	return head;
+TreeListNode* TreeList::obtenerCabeza(){
+        return head;
 }
 
-void TreeList::removeFirst(){
-	TreeListNode* ptr = head;
-	if (head != nullptr){
-		head = head->getNext();
-		delete ptr;
-	}
+void TreeList::eliminarPrimero(){
+        // Elimina el primer elemento (si existe) y libera su memoria.
+        TreeListNode* ptr = head;
+        if (head != nullptr){
+                head = head->obtenerSiguiente();
+                delete ptr;
+        }
 }
 
 
-void TreeList::remove(int val){
-	TreeListNode* ptr = head;
-	TreeListNode* ptr_prev = nullptr;
-	while (ptr != nullptr){
-		if ((ptr->getData())->getData() == val){
-			//erase node
-			if (ptr_prev == nullptr) {
-				head = ptr->getNext();
-				delete ptr;
-				ptr = head;
-			}
-			else{
-				ptr_prev->setNext(ptr->getNext());
-				delete ptr;
-				ptr = ptr_prev->getNext();
-			}
-		}
-		else{
-			ptr_prev = ptr;
-			ptr = ptr->getNext();
-		}
-	}
+void TreeList::eliminar(int val){
+        // Recorre la lista y elimina todos los nodos cuyo valor coincida.
+        TreeListNode* ptr = head;
+        TreeListNode* ptr_prev = nullptr;
+        while (ptr != nullptr){
+                if ((ptr->obtenerDato())->obtenerDato() == val){
+                        // Se elimina el nodo que contiene el valor buscado.
+                        if (ptr_prev == nullptr) {
+                                head = ptr->obtenerSiguiente();
+                                delete ptr;
+                                ptr = head;
+                        }
+                        else{
+                                ptr_prev->establecerSiguiente(ptr->obtenerSiguiente());
+                                delete ptr;
+                                ptr = ptr_prev->obtenerSiguiente();
+                        }
+                }
+                else{
+                        ptr_prev = ptr;
+                        ptr = ptr->obtenerSiguiente();
+                }
+        }
 }
 
-void TreeList::removeAll(){
-	while (head != nullptr){
-		removeFirst();
-	}
+void TreeList::eliminarTodos(){
+        // Elimina todos los elementos de la lista uno por uno.
+        while (head != nullptr){
+                eliminarPrimero();
+        }
 }
 
-TreeNode* TreeList::find(int val){
-	TreeListNode* ptr = head;
-	while ((ptr != nullptr) && ((ptr->getData())->getData() != val)){
-		ptr = ptr->getNext();
-	}
-	return ptr->getData();
+TreeNode* TreeList::buscar(int val){
+        // Busca secuencialmente un TreeNode por su dato.
+        TreeListNode* ptr = head;
+        while ((ptr != nullptr) && ((ptr->obtenerDato())->obtenerDato() != val)){
+                ptr = ptr->obtenerSiguiente();
+        }
+        if (ptr == nullptr){
+                return nullptr;
+        }
+        return ptr->obtenerDato();
 }
 
-bool TreeList::isEmpty(){
-	return (head == nullptr);
+bool TreeList::estaVacia(){
+        return (head == nullptr);
 }
 
-void TreeList::print(){
-	TreeListNode* ptr = head;
-	while (ptr != nullptr){
-		std::cout << ptr->getData()->getData() << " - " <<std::endl;
-		ptr = ptr -> getNext();
-	}
+void TreeList::imprimir(){
+        // Imprime todos los valores almacenados en la lista.
+        TreeListNode* ptr = head;
+        while (ptr != nullptr){
+                std::cout << ptr->obtenerDato()->obtenerDato() << " - " <<std::endl;
+                ptr = ptr->obtenerSiguiente();
+        }
 }
 
 TreeList::~TreeList() {
-	removeAll();
+        // El destructor elimina cada nodo de la lista para evitar fugas.
+        eliminarTodos();
 }
 
-
-
-
-
 } /* namespace trees */
-
 
