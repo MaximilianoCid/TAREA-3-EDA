@@ -31,25 +31,25 @@ public:
         Tree();
 
         /// Asigna la raíz del árbol si aún no se había establecido.
-        void setRoot(TreeNode* node);
+        void establecerRaiz(TreeNode* node);
 
         /// Inserta un nodo hijo debajo de un nodo padre ya existente.
-        void insert(TreeNode* node, TreeNode* parent);
+        void insertar(TreeNode* node, TreeNode* parent);
 
         /// Crea un nodo hijo con el valor indicado e intenta insertarlo bajo el padre.
-        void insert(int child, int parent);
+        void insertar(int child, int parent);
 
         /// Búsqueda recursiva de un valor a partir de un nodo arbitrario.
-        TreeNode* find_rec(int val, TreeNode* node);
+        TreeNode* buscarRecursivo(int val, TreeNode* node);
 
         /// Busca un valor dentro del árbol empezando desde la raíz.
-        TreeNode* find(int val);
+        TreeNode* buscar(int val);
 
         /// Recorre el árbol en preorden imprimiendo cada nivel con indentación.
-        void traverse_rec(TreeNode* node, int level);
+        void recorrerRecursivo(TreeNode* node, int level);
 
         /// Recorre el árbol completo desde la raíz.
-        void traverse();
+        void recorrer();
 
         /// Libera todos los recursos asociados al árbol y sus nodos.
         virtual ~Tree();

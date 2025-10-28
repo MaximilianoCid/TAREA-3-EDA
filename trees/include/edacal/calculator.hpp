@@ -18,9 +18,9 @@ public:
     Calculator();
     // Procesa una linea leida del usuario y escribe las respuestas en el flujo.
     // Devuelve false solo cuando se solicita terminar la sesion.
-    bool processLine(const std::string& line, std::ostream& os);
+    bool procesarLinea(const std::string& line, std::ostream& os);
     // Ciclo interactivo completo de la calculadora, leyendo hasta EOF o "exit".
-    void repl(std::istream& is, std::ostream& os);
+    void ejecutarRepl(std::istream& is, std::ostream& os);
 
 private:
     // Tipos de token reconocidos por el analizador lexico.
@@ -63,28 +63,28 @@ private:
     std::unique_ptr<ExpressionNode> lastExpression_;
 
     // Utilidades varias para normalizar cadenas y validar identificadores.
-    static std::string trim(const std::string& text);
-    static bool isIdentifier(const std::string& text);
+    static std::string recortar(const std::string& text);
+    static bool esIdentificador(const std::string& text);
     // Fases del procesador de expresiones: tokenizacion, conversion a postfijo,
     // construccion de arbol y evaluacion.
-    std::vector<Token> tokenize(const std::string& expression, std::string& error) const;
-    std::vector<Token> toPostfix(const std::vector<Token>& tokens, std::string& error) const;
-    std::unique_ptr<ExpressionNode> buildTree(const std::vector<Token>& postfix, std::string& error) const;
-    long long evaluate(const ExpressionNode* node, std::string& error) const;
-    long long applyOperator(const ExpressionNode* node, long long left, long long right, std::string& error) const;
-    long long applyUnaryOperator(const ExpressionNode* node, long long operand, std::string& error) const;
+    std::vector<Token> tokenizar(const std::string& expression, std::string& error) const;
+    std::vector<Token> aPostfijo(const std::vector<Token>& tokens, std::string& error) const;
+    std::unique_ptr<ExpressionNode> construirArbol(const std::vector<Token>& postfix, std::string& error) const;
+    long long evaluar(const ExpressionNode* node, std::string& error) const;
+    long long aplicarOperador(const ExpressionNode* node, long long left, long long right, std::string& error) const;
+    long long aplicarOperadorUnario(const ExpressionNode* node, long long operand, std::string& error) const;
     // Ayudantes matematicos y de formato para los operadores.
-    static long long ipow(long long base, long long exp);
-    static bool isRightAssociative(const Token& token);
-    static int precedence(const Token& token);
-    void printTree(const ExpressionNode* node, const std::string& prefix, bool isRight, std::ostream& os) const;
-    void toPrefix(const ExpressionNode* node, std::vector<std::string>& output) const;
-    void toPostfix(const ExpressionNode* node, std::vector<std::string>& output) const;
-    std::string makeConversionOutput(const std::unique_ptr<ExpressionNode>& node, bool prefix) const;
+    static long long potenciaEntera(long long base, long long exp);
+    static bool esAsociativoDerecha(const Token& token);
+    static int precedencia(const Token& token);
+    void imprimirArbol(const ExpressionNode* node, const std::string& prefix, bool isRight, std::ostream& os) const;
+    void aPrefijo(const ExpressionNode* node, std::vector<std::string>& output) const;
+    void aPostfijo(const ExpressionNode* node, std::vector<std::string>& output) const;
+    std::string generarSalidaConversion(const std::unique_ptr<ExpressionNode>& node, bool prefix) const;
     // Manejadores especificos para cada tipo de comando expuesto al usuario.
-    bool handleShowCommand(std::istringstream& iss, std::ostream& os);
-    bool handlePrefixPostfixCommand(const std::string& command, std::istringstream& iss, std::ostream& os);
-    bool handleExpression(const std::string& expression, std::ostream& os);
+    bool manejarComandoMostrar(std::istringstream& iss, std::ostream& os);
+    bool manejarComandoPrefijoPostfijo(const std::string& command, std::istringstream& iss, std::ostream& os);
+    bool manejarExpresion(const std::string& expression, std::ostream& os);
 };
 
 } // namespace edacal

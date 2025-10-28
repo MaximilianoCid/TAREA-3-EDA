@@ -17,22 +17,22 @@ TreeNode::TreeNode(int val): parent(nullptr), data(val), children(new TreeList()
         // Variante que establece el dato almacenado desde el inicio.
 }
 
-void TreeNode::setParent(TreeNode* node){
+void TreeNode::establecerPadre(TreeNode* node){
         parent = node;
 }
-void TreeNode::setData(int val){
+void TreeNode::establecerDato(int val){
         data = val;
 }
-void TreeNode::setChildren(TreeList* list){
+void TreeNode::establecerHijos(TreeList* list){
         children = list;
 }
-TreeNode* TreeNode::getParent(){
+TreeNode* TreeNode::obtenerPadre(){
         return parent;
 }
-int TreeNode::getData(){
+int TreeNode::obtenerDato(){
         return data;
 }
-TreeList* TreeNode::getChildren(){
+TreeList* TreeNode::obtenerHijos(){
         return children;
 }
 

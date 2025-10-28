@@ -31,28 +31,28 @@ public:
         TreeList();
 
         /// Devuelve el nodo inicial de la lista.
-        TreeListNode* getHead();
+        TreeListNode* obtenerCabeza();
 
         /// Inserta un nodo al inicio de la lista.
-        void insertFirst(TreeNode* treeNode);
+        void insertarPrimero(TreeNode* treeNode);
 
         /// Elimina el primer elemento de la lista.
-        void removeFirst();
+        void eliminarPrimero();
 
         /// Elimina cualquier nodo cuyo valor almacenado coincida con val.
-        void remove(int val);
+        void eliminar(int val);
 
         /// Vacía por completo la lista, liberando cada TreeListNode.
-        void removeAll();
+        void eliminarTodos();
 
         /// Indica si la lista está vacía.
-        bool isEmpty();
+        bool estaVacia();
 
         /// Busca un valor dentro de la lista y devuelve el TreeNode asociado.
-        TreeNode* find(int val);
+        TreeNode* buscar(int val);
 
         /// Imprime en consola el valor de cada hijo almacenado.
-        void print();
+        void imprimir();
 
         /// Libera todos los recursos asociados a la lista.
         virtual ~TreeList();

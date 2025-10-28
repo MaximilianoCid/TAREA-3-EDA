@@ -39,22 +39,22 @@ public:
         explicit TreeNode(int val);
 
         /// Actualiza la referencia al nodo padre.
-        void setParent(TreeNode* node);
+        void establecerPadre(TreeNode* node);
 
         /// Cambia el valor almacenado en el nodo.
-        void setData(int val);
+        void establecerDato(int val);
 
         /// Reemplaza la lista de hijos por una lista externa.
-        void setChildren(TreeList* list);
+        void establecerHijos(TreeList* list);
 
         /// Obtiene el puntero al padre del nodo.
-        TreeNode* getParent();
+        TreeNode* obtenerPadre();
 
         /// Devuelve el valor almacenado.
-        int getData();
+        int obtenerDato();
 
         /// Recupera la lista de hijos inmediata.
-        TreeList* getChildren();
+        TreeList* obtenerHijos();
 
         /// Libera los recursos del nodo y de sus descendientes.
         virtual ~TreeNode();

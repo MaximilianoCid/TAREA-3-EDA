@@ -17,16 +17,16 @@ TreeListNode::TreeListNode(TreeNode* _data,
                 TreeListNode* next) : data(_data), ptrNext(next){
         // Constructor que permite dejar preconfigurados dato y siguiente.
 }
-void TreeListNode::setData(TreeNode* _data){
+void TreeListNode::establecerDato(TreeNode* _data){
         data = _data;
 }
-void TreeListNode::setNext(TreeListNode* _next){
+void TreeListNode::establecerSiguiente(TreeListNode* _next){
         ptrNext = _next;
 }
-TreeNode* TreeListNode::getData(){
+TreeNode* TreeListNode::obtenerDato(){
         return data;
 }
-TreeListNode* TreeListNode::getNext(){
+TreeListNode* TreeListNode::obtenerSiguiente(){
         return ptrNext;
 }
 

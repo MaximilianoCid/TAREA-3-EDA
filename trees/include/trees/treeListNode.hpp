@@ -34,16 +34,16 @@ public:
         TreeListNode(TreeNode* _data, TreeListNode* next = nullptr);
 
         /// Actualiza el dato almacenado.
-        void setData(TreeNode* _data);
+        void establecerDato(TreeNode* _data);
 
         /// Cambia el puntero al siguiente elemento.
-        void setNext(TreeListNode* _next);
+        void establecerSiguiente(TreeListNode* _next);
 
         /// Devuelve el dato almacenado.
-        TreeNode* getData();
+        TreeNode* obtenerDato();
 
         /// Devuelve el siguiente elemento en la lista.
-        TreeListNode* getNext();
+        TreeListNode* obtenerSiguiente();
 
         /// Libera el nodo de árbol almacenado.
         virtual ~TreeListNode();
