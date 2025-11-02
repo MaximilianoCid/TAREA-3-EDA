@@ -1,10 +1,3 @@
-/*
- * treeNode.hpp
- *
- *  Created on: Aug 30, 2022
- *      Author: jsaavedr
- */
-
 #ifndef TREENODE_HPP_
 #define TREENODE_HPP_
 
@@ -13,50 +6,30 @@
 namespace trees {
 
 class TreeList;
-/**
- * \brief Nodo individual del árbol general.
- *
- * Cada nodo conoce a su padre, el dato entero que almacena y la lista de hijos
- * directos.  No se impone ninguna restricción en la cantidad de hijos que puede
- * contener.
- */
 class TreeNode {
 private:
-        /// Referencia al nodo padre. Es nullptr para la raíz del árbol.
+        //nodo padre
         TreeNode* parent;
-
-        /// Valor almacenado en el nodo. Puede adaptarse a otro tipo si se requiere.
+        //valor nodo
         int data; // data can be of any type
-
-        /// Lista enlazada que mantiene los hijos inmediatos del nodo.
+        //lista de hijos
         TreeList* children;
 
 public:
-        /// Construye un nodo sin dato definido y sin padre.
         TreeNode();
-
-        /// Construye un nodo con el valor proporcionado.
         explicit TreeNode(int val);
-
-        /// Actualiza la referencia al nodo padre.
+        //cambia el valor del nodo padre
         void establecerPadre(TreeNode* node);
-
-        /// Cambia el valor almacenado en el nodo.
+        //cambia el valor del nodo
         void establecerDato(int val);
-
-        /// Reemplaza la lista de hijos por una lista externa.
+        //cambia la lista de hijos
         void establecerHijos(TreeList* list);
-
-        /// Obtiene el puntero al padre del nodo.
+        //entrega el nodo padre
         TreeNode* obtenerPadre();
-
-        /// Devuelve el valor almacenado.
+        //entrega el valor del nodo
         int obtenerDato();
-
-        /// Recupera la lista de hijos inmediata.
+        //entrega la lista de hijos
         TreeList* obtenerHijos();
-
-        /// Libera los recursos del nodo y de sus descendientes.
         virtual ~TreeNode();
 };
 

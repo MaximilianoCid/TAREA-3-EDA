@@ -1,10 +1,3 @@
-/*
- * childrenList.hpp
- *
- *  Created on: Aug 31, 2022
- *      Author: jsaavedr
- */
-
 #ifndef CHILDRENLIST_HPP_
 #define CHILDRENLIST_HPP_
 
@@ -14,47 +7,29 @@ namespace trees {
 
 class TreeNode;
 class TreeListNode;
-/**
- * \brief Lista enlazada simple utilizada para almacenar los hijos de un nodo.
- *
- * La lista guarda punteros a TreeNode y ofrece operaciones básicas de inserción,
- * búsqueda y eliminación.  Se usa internamente por TreeNode para modelar la
- * relación padre-hijos.
- */
 class TreeList {
 private:
-        /// Puntero al primer elemento de la lista.
+        //puntero al primer elemento
         TreeListNode* head;
 
 public:
-        /// Construye una lista vacía.
+        //constructor
         TreeList();
-
-        /// Devuelve el nodo inicial de la lista.
+        //entrega el head
         TreeListNode* obtenerCabeza();
-
-        /// Inserta un nodo al inicio de la lista.
+        //inserta un nodo al principio
         void insertarPrimero(TreeNode* treeNode);
-
-        /// Elimina el primer elemento de la lista.
+        //elimina el primer elemento
         void eliminarPrimero();
-
-        /// Elimina cualquier nodo cuyo valor almacenado coincida con val.
+        //elimina un nodo
         void eliminar(int val);
-
-        /// Vacía por completo la lista, liberando cada TreeListNode.
+        //elimina todos los nodos
         void eliminarTodos();
-
-        /// Indica si la lista está vacía.
+        //dice si esta vacio o no
         bool estaVacia();
-
-        /// Busca un valor dentro de la lista y devuelve el TreeNode asociado.
+        //entrega el nodo con el valor val
         TreeNode* buscar(int val);
-
-        /// Imprime en consola el valor de cada hijo almacenado.
         void imprimir();
-
-        /// Libera todos los recursos asociados a la lista.
         virtual ~TreeList();
 };
 

@@ -9,20 +9,13 @@
 
 namespace edacal {
 
-// ------------------------------- Constructores ------------------------------
-
-// Inicializa un nodo del arbol de expresion configurando sus punteros a nulo.
 Calculator::ExpressionNode::ExpressionNode(NodeKind kind, std::string value, bool unary)
     : kind(kind), value(std::move(value)), unary(unary), left(nullptr), right(nullptr) {}
 
-// Configura la tabla de variables e inicializa "ans" en cero.
 Calculator::Calculator() : variables_(), lastExpression_(nullptr) {
     variables_["ans"] = 0;
 }
 
-// ----------------------------- API publica ---------------------------------
-
-// Analiza una linea completa y decide que accion ejecutar.
 bool Calculator::procesarLinea(const std::string& line, std::ostream& os) {
     std::string trimmed = recortar(line);
     if (trimmed.empty()) {
@@ -46,7 +39,7 @@ bool Calculator::procesarLinea(const std::string& line, std::ostream& os) {
     return manejarExpresion(trimmed, os);
 }
 
-// Ejecuta el REPL hasta recibir EOF o el comando "exit".
+
 void Calculator::ejecutarRepl(std::istream& is, std::ostream& os) {
     std::string line;
     while (true) {
@@ -60,9 +53,6 @@ void Calculator::ejecutarRepl(std::istream& is, std::ostream& os) {
     }
 }
 
-// ------------------------- Funciones utilitarias ----------------------------
-
-// Elimina espacios en blanco al inicio y al final de la cadena dada.
 std::string Calculator::recortar(const std::string& text) {
     auto it_begin = std::find_if_not(text.begin(), text.end(), [](unsigned char ch) { return std::isspace(ch); });
     auto it_end = std::find_if_not(text.rbegin(), text.rend(), [](unsigned char ch) { return std::isspace(ch); }).base();
@@ -72,7 +62,6 @@ std::string Calculator::recortar(const std::string& text) {
     return std::string(it_begin, it_end);
 }
 
-// Comprueba si una cadena puede usarse como identificador valido.
 bool Calculator::esIdentificador(const std::string& text) {
     if (text.empty()) {
         return false;
@@ -88,7 +77,6 @@ bool Calculator::esIdentificador(const std::string& text) {
     return true;
 }
 
-// Divide la expresion en tokens (numeros, identificadores y operadores).
 std::vector<Calculator::Token> Calculator::tokenizar(const std::string& expression, std::string& error) const {
     std::vector<Token> tokens;
     for (size_t i = 0; i < expression.size();) {
@@ -134,7 +122,6 @@ std::vector<Calculator::Token> Calculator::tokenizar(const std::string& expressi
                 ++i;
                 break;
             default:
-                // Caracter no reconocido: abortamos con un mensaje de error.
                 error = std::string("Caracter invalido en la expresion: ") + ch;
                 return {};
         }
@@ -142,9 +129,6 @@ std::vector<Calculator::Token> Calculator::tokenizar(const std::string& expressi
     return tokens;
 }
 
-// ---------------------- Manejo de precedencia y pila -----------------------
-
-// Determina si un operador se evalua de derecha a izquierda.
 bool Calculator::esAsociativoDerecha(const Token& token) {
     if (token.unary) {
         return true;
@@ -152,7 +136,6 @@ bool Calculator::esAsociativoDerecha(const Token& token) {
     return token.text == "^";
 }
 
-// Define el nivel de precedencia de cada operador.
 int Calculator::precedencia(const Token& token) {
     if (token.unary) {
         return 4;
@@ -169,7 +152,6 @@ int Calculator::precedencia(const Token& token) {
     return 0;
 }
 
-// Aplica el algoritmo shunting-yard para convertir a notacion postfija.
 std::vector<Calculator::Token> Calculator::aPostfijo(const std::vector<Token>& inputTokens, std::string& error) const {
     std::vector<Token> output;
     Pila<Token> pilaOperadores;
@@ -226,7 +208,6 @@ std::vector<Calculator::Token> Calculator::aPostfijo(const std::vector<Token>& i
                     output.push_back(top);
                 }
                 if (!matched) {
-                    // Se encontro un parentesis de cierre sin pareja.
                     error = "Parentesis desbalanceados";
                     return {};
                 }
@@ -239,7 +220,6 @@ std::vector<Calculator::Token> Calculator::aPostfijo(const std::vector<Token>& i
     while (!pilaOperadores.estaVacia()) {
         Token top = pilaOperadores.desapilar();
         if (top.type == TokenType::LParen || top.type == TokenType::RParen) {
-            // Si quedan parentesis abiertos en la pila, la expresion es invalida.
             error = "Parentesis desbalanceados";
             return {};
         }
@@ -249,9 +229,6 @@ std::vector<Calculator::Token> Calculator::aPostfijo(const std::vector<Token>& i
     return output;
 }
 
-// ----------------------- Construccion y evaluacion -------------------------
-
-// Arma el arbol de expresion a partir de la secuencia en postfijo.
 std::unique_ptr<Calculator::ExpressionNode> Calculator::construirArbol(const std::vector<Token>& postfix, std::string& error) const {
     Pila<std::unique_ptr<ExpressionNode>> pila;
     for (const Token& token : postfix) {
@@ -271,7 +248,6 @@ std::unique_ptr<Calculator::ExpressionNode> Calculator::construirArbol(const std
                 pila.apilar(std::move(node));
             } else {
                 if (pila.tamano() < 2) {
-                    // No hay operandos suficientes para un operador binario.
                     error = "Operacion invalida";
                     return nullptr;
                 }
@@ -286,14 +262,12 @@ std::unique_ptr<Calculator::ExpressionNode> Calculator::construirArbol(const std
     }
 
     if (pila.tamano() != 1) {
-        // Debe quedar exactamente un nodo si la expresion es correcta.
         error = "Expresion invalida";
         return nullptr;
     }
     return pila.desapilar();
 }
 
-// Evalua recursivamente el arbol y detecta errores semanticos.
 long long Calculator::evaluar(const ExpressionNode* node, std::string& error) const {
     if (!node) {
         error = "Expresion vacia";
@@ -338,7 +312,6 @@ long long Calculator::evaluar(const ExpressionNode* node, std::string& error) co
     return 0;
 }
 
-// Ejecuta los operadores binarios soportados y valida casos especiales.
 long long Calculator::aplicarOperador(const ExpressionNode* node, long long left, long long right, std::string& error) const {
     if (node->value == "+") {
         return left + right;
@@ -374,7 +347,6 @@ long long Calculator::aplicarOperador(const ExpressionNode* node, long long left
     return 0;
 }
 
-// Gestiona los operadores unarios (+/-) aplicados a un solo operando.
 long long Calculator::aplicarOperadorUnario(const ExpressionNode* node, long long operand, std::string& error) const {
     if (node->value == "+") {
         return operand;
@@ -386,7 +358,6 @@ long long Calculator::aplicarOperadorUnario(const ExpressionNode* node, long lon
     return 0;
 }
 
-// Potenciacion entera mediante exponenciacion binaria.
 long long Calculator::potenciaEntera(long long base, long long exp) {
     long long result = 1;
     while (exp > 0) {
@@ -399,7 +370,6 @@ long long Calculator::potenciaEntera(long long base, long long exp) {
     return result;
 }
 
-// Imprime un arbol en consola con formato ASCII.
 void Calculator::imprimirArbol(const ExpressionNode* node, const std::string& prefix, bool isRight, std::ostream& os) const {
     if (!node) {
         return;
@@ -421,7 +391,6 @@ void Calculator::imprimirArbol(const ExpressionNode* node, const std::string& pr
     }
 }
 
-// Recorre el arbol en preorden para generar la forma prefija.
 void Calculator::aPrefijo(const ExpressionNode* node, std::vector<std::string>& output) const {
     if (!node) {
         return;
@@ -435,7 +404,6 @@ void Calculator::aPrefijo(const ExpressionNode* node, std::vector<std::string>& 
     }
 }
 
-// Recorre el arbol en postorden para generar la forma postfija.
 void Calculator::aPostfijo(const ExpressionNode* node, std::vector<std::string>& output) const {
     if (!node) {
         return;
@@ -449,7 +417,6 @@ void Calculator::aPostfijo(const ExpressionNode* node, std::vector<std::string>&
     output.push_back(node->value);
 }
 
-// Genera una cadena ya sea en notacion prefija o postfija desde un arbol.
 std::string Calculator::generarSalidaConversion(const std::unique_ptr<ExpressionNode>& node, bool prefix) const {
     if (!node) {
         return "";
@@ -470,9 +437,6 @@ std::string Calculator::generarSalidaConversion(const std::unique_ptr<Expression
     return oss.str();
 }
 
-// ------------------------- Manejo de comandos -------------------------------
-
-// Atiende el comando "show", mostrando variables o el ultimo arbol.
 bool Calculator::manejarComandoMostrar(std::istringstream& iss, std::ostream& os) {
     std::string variable;
     if (!(iss >> variable)) {
@@ -497,7 +461,6 @@ bool Calculator::manejarComandoMostrar(std::istringstream& iss, std::ostream& os
     return true;
 }
 
-// Procesa "prefix" y "postfix" reutilizando la logica de conversion.
 bool Calculator::manejarComandoPrefijoPostfijo(const std::string& command, std::istringstream& iss, std::ostream& os) {
     std::string expression;
     std::getline(iss, expression);
@@ -535,7 +498,6 @@ bool Calculator::manejarComandoPrefijoPostfijo(const std::string& command, std::
     return true;
 }
 
-// Analiza una expresion completa, permitiendo asignaciones y evaluacion.
 bool Calculator::manejarExpresion(const std::string& expression, std::ostream& os) {
     size_t depth = 0;
     size_t assignIndex = std::string::npos;
@@ -614,4 +576,4 @@ bool Calculator::manejarExpresion(const std::string& expression, std::ostream& o
     return true;
 }
 
-} // namespace edacal
+}
