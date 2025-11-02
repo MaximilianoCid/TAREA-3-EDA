@@ -20,6 +20,7 @@ private:
     enum class TokenType {
         Number,
         Identifier,
+        Function,
         Operator,
         LParen,
         RParen
@@ -32,6 +33,7 @@ private:
     enum class NodeKind {
         Number,
         Identifier,
+        Function,
         Operator
     };
     struct ExpressionNode {
@@ -53,6 +55,7 @@ private:
     long long evaluar(const ExpressionNode* node, std::string& error) const;
     long long aplicarOperador(const ExpressionNode* node, long long left, long long right, std::string& error) const;
     long long aplicarOperadorUnario(const ExpressionNode* node, long long operand, std::string& error) const;
+    long long aplicarFuncion(const ExpressionNode* node, long long operand, std::string& error) const;
     static long long potenciaEntera(long long base, long long exp);
     static bool esAsociativoDerecha(const Token& token);
     static int precedencia(const Token& token);

@@ -7,7 +7,7 @@ int main() {
     edacal::Calculator calculadora;
     std::string line;
    
-    std::cout<<"Bienvenid a Edacal" << std::endl;
+    std::cout<<"Bienvenido a EdaCal" << std::endl;
     std::cout << ">> " << std::flush;
     // Bucle principal: leer linea, procesarla y repetir hasta recibir "exit".
     while (std::getline(std::cin, line)) {

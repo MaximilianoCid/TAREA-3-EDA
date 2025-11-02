@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -31,6 +32,14 @@ bool Calculator::procesarLinea(const std::string& line, std::ostream& os) {
 
     if (command == "show") {
         return manejarComandoMostrar(iss, os);
+    }
+    if (command == "tree") {
+        if (!lastExpression_) {
+            os << "No hay expresion para mostrar" << std::endl;
+            return true;
+        }
+        imprimirArbol(lastExpression_.get(), "", false, os);
+        return true;
     }
     if (command == "prefix" || command == "posfix") {
         return manejarComandoPrefijoposfix(command, iss, os);
@@ -99,7 +108,15 @@ std::vector<Calculator::Token> Calculator::tokenizar(const std::string& expressi
             while (j < expression.size() && (std::isalnum(static_cast<unsigned char>(expression[j])) || expression[j] == '_')) {
                 ++j;
             }
-            tokens.push_back({TokenType::Identifier, expression.substr(i, j - i), false});
+            size_t k = j;
+            while (k < expression.size() && std::isspace(static_cast<unsigned char>(expression[k]))) {
+                ++k;
+            }
+            if (k < expression.size() && expression[k] == '(') {
+                tokens.push_back({TokenType::Function, expression.substr(i, j - i), false});
+            } else {
+                tokens.push_back({TokenType::Identifier, expression.substr(i, j - i), false});
+            }
             i = j;
             continue;
         }
@@ -173,6 +190,10 @@ std::vector<Calculator::Token> Calculator::aposfix(const std::vector<Token>& inp
                 output.push_back(token);
                 prevToken = token;
                 break;
+            case TokenType::Function:
+                pilaOperadores.apilar(token);
+                prevToken = token;
+                break;
             case TokenType::Operator: {
                 while (!pilaOperadores.estaVacia()) {
                     const Token& top = pilaOperadores.cima();
@@ -211,6 +232,9 @@ std::vector<Calculator::Token> Calculator::aposfix(const std::vector<Token>& inp
                     error = "Parentesis desbalanceados";
                     return {};
                 }
+                if (!pilaOperadores.estaVacia() && pilaOperadores.cima().type == TokenType::Function) {
+                    output.push_back(pilaOperadores.desapilar());
+                }
                 prevToken = token;
                 break;
             }
@@ -236,6 +260,15 @@ std::unique_ptr<Calculator::ExpressionNode> Calculator::construirArbol(const std
             pila.apilar(std::unique_ptr<ExpressionNode>(new ExpressionNode(NodeKind::Number, token.text)));
         } else if (token.type == TokenType::Identifier) {
             pila.apilar(std::unique_ptr<ExpressionNode>(new ExpressionNode(NodeKind::Identifier, token.text)));
+        } else if (token.type == TokenType::Function) {
+            if (pila.estaVacia()) {
+                error = "Funcion sin argumentos";
+                return nullptr;
+            }
+            auto arg = pila.desapilar();
+            std::unique_ptr<ExpressionNode> node(new ExpressionNode(NodeKind::Function, token.text, false));
+            node->right = std::move(arg);
+            pila.apilar(std::move(node));
         } else if (token.type == TokenType::Operator) {
             if (token.unary) {
                 if (pila.estaVacia()) {
@@ -288,6 +321,13 @@ long long Calculator::evaluar(const ExpressionNode* node, std::string& error) co
                 return 0;
             }
             return it->second;
+        }
+        case NodeKind::Function: {
+            long long operand = evaluar(node->right.get(), error);
+            if (!error.empty()) {
+                return 0;
+            }
+            return aplicarFuncion(node, operand, error);
         }
         case NodeKind::Operator: {
             if (node->unary) {
@@ -355,6 +395,19 @@ long long Calculator::aplicarOperadorUnario(const ExpressionNode* node, long lon
         return -operand;
     }
     error = "Operador unario desconocido: " + node->value;
+    return 0;
+}
+
+long long Calculator::aplicarFuncion(const ExpressionNode* node, long long operand, std::string& error) const {
+    if (node->value == "sqrt") {
+        if (operand < 0) {
+            error = "sqrt: argumento negativo";
+            return 0;
+        }
+        double r = std::sqrt(static_cast<double>(operand));
+        return static_cast<long long>(std::floor(r));
+    }
+    error = "Funcion desconocida: " + node->value;
     return 0;
 }
 
@@ -569,10 +622,13 @@ bool Calculator::manejarExpresion(const std::string& expression, std::ostream& o
     if (!variable.empty()) {
         variables_[variable] = result;
     }
-    variables_["ans"] = result;
     lastExpression_ = std::move(tree);
-
-    os << "ans = " << result << std::endl;
+    if (!variable.empty()) {
+        os << variable << " = " << result << std::endl;
+    } else {
+        variables_["ans"] = result;
+        os << "ans = " << result << std::endl;
+    }
     return true;
 }
 
