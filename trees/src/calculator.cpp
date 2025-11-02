@@ -32,8 +32,8 @@ bool Calculator::procesarLinea(const std::string& line, std::ostream& os) {
     if (command == "show") {
         return manejarComandoMostrar(iss, os);
     }
-    if (command == "prefix" || command == "postfix") {
-        return manejarComandoPrefijoPostfijo(command, iss, os);
+    if (command == "prefix" || command == "posfix") {
+        return manejarComandoPrefijoposfix(command, iss, os);
     }
 
     return manejarExpresion(trimmed, os);
@@ -152,7 +152,7 @@ int Calculator::precedencia(const Token& token) {
     return 0;
 }
 
-std::vector<Calculator::Token> Calculator::aPostfijo(const std::vector<Token>& inputTokens, std::string& error) const {
+std::vector<Calculator::Token> Calculator::aposfix(const std::vector<Token>& inputTokens, std::string& error) const {
     std::vector<Token> output;
     Pila<Token> pilaOperadores;
     Token prevToken{TokenType::Operator, "", false};
@@ -229,9 +229,9 @@ std::vector<Calculator::Token> Calculator::aPostfijo(const std::vector<Token>& i
     return output;
 }
 
-std::unique_ptr<Calculator::ExpressionNode> Calculator::construirArbol(const std::vector<Token>& postfix, std::string& error) const {
+std::unique_ptr<Calculator::ExpressionNode> Calculator::construirArbol(const std::vector<Token>& posfix, std::string& error) const {
     Pila<std::unique_ptr<ExpressionNode>> pila;
-    for (const Token& token : postfix) {
+    for (const Token& token : posfix) {
         if (token.type == TokenType::Number) {
             pila.apilar(std::unique_ptr<ExpressionNode>(new ExpressionNode(NodeKind::Number, token.text)));
         } else if (token.type == TokenType::Identifier) {
@@ -404,15 +404,15 @@ void Calculator::aPrefijo(const ExpressionNode* node, std::vector<std::string>& 
     }
 }
 
-void Calculator::aPostfijo(const ExpressionNode* node, std::vector<std::string>& output) const {
+void Calculator::aposfix(const ExpressionNode* node, std::vector<std::string>& output) const {
     if (!node) {
         return;
     }
     if (node->left) {
-        aPostfijo(node->left.get(), output);
+        aposfix(node->left.get(), output);
     }
     if (node->right) {
-        aPostfijo(node->right.get(), output);
+        aposfix(node->right.get(), output);
     }
     output.push_back(node->value);
 }
@@ -425,7 +425,7 @@ std::string Calculator::generarSalidaConversion(const std::unique_ptr<Expression
     if (prefix) {
         aPrefijo(node.get(), tokens);
     } else {
-        aPostfijo(node.get(), tokens);
+        aposfix(node.get(), tokens);
     }
     std::ostringstream oss;
     for (size_t i = 0; i < tokens.size(); ++i) {
@@ -461,7 +461,7 @@ bool Calculator::manejarComandoMostrar(std::istringstream& iss, std::ostream& os
     return true;
 }
 
-bool Calculator::manejarComandoPrefijoPostfijo(const std::string& command, std::istringstream& iss, std::ostream& os) {
+bool Calculator::manejarComandoPrefijoposfix(const std::string& command, std::istringstream& iss, std::ostream& os) {
     std::string expression;
     std::getline(iss, expression);
     expression = recortar(expression);
@@ -481,12 +481,12 @@ bool Calculator::manejarComandoPrefijoPostfijo(const std::string& command, std::
         os << error << std::endl;
         return true;
     }
-    auto postfix = aPostfijo(tokens, error);
+    auto posfix = aposfix(tokens, error);
     if (!error.empty()) {
         os << error << std::endl;
         return true;
     }
-    auto tree = construirArbol(postfix, error);
+    auto tree = construirArbol(posfix, error);
     if (!error.empty() || !tree) {
         if (error.empty()) {
             error = "Expresion invalida";
@@ -545,12 +545,12 @@ bool Calculator::manejarExpresion(const std::string& expression, std::ostream& o
         os << error << std::endl;
         return true;
     }
-    auto postfix = aPostfijo(tokens, error);
+    auto posfix = aposfix(tokens, error);
     if (!error.empty()) {
         os << error << std::endl;
         return true;
     }
-    auto tree = construirArbol(postfix, error);
+    auto tree = construirArbol(posfix, error);
     if (!error.empty() || !tree) {
         if (error.empty()) {
             error = "Expresion invalida";

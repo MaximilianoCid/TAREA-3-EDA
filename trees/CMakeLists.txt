@@ -12,8 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_executable(test_tree tests/test.cpp src/treeNode.cpp src/treeListNode.cpp src/treeList.cpp src/tree.cpp)
 target_include_directories(test_tree PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-add_executable(edacal src/main.cpp src/calculator.cpp)
+add_executable(edacal src/main.cpp src/calculator.cpp src/treeNode.cpp src/treeListNode.cpp src/treeList.cpp src/tree.cpp)
 target_include_directories(edacal PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-# add the executable
 

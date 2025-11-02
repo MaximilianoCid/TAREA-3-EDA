@@ -48,8 +48,8 @@ private:
     static std::string recortar(const std::string& text);
     static bool esIdentificador(const std::string& text);
     std::vector<Token> tokenizar(const std::string& expression, std::string& error) const;
-    std::vector<Token> aPostfijo(const std::vector<Token>& tokens, std::string& error) const;
-    std::unique_ptr<ExpressionNode> construirArbol(const std::vector<Token>& postfix, std::string& error) const;
+    std::vector<Token> aposfix(const std::vector<Token>& tokens, std::string& error) const;
+    std::unique_ptr<ExpressionNode> construirArbol(const std::vector<Token>& posfix, std::string& error) const;
     long long evaluar(const ExpressionNode* node, std::string& error) const;
     long long aplicarOperador(const ExpressionNode* node, long long left, long long right, std::string& error) const;
     long long aplicarOperadorUnario(const ExpressionNode* node, long long operand, std::string& error) const;
@@ -58,10 +58,10 @@ private:
     static int precedencia(const Token& token);
     void imprimirArbol(const ExpressionNode* node, const std::string& prefix, bool isRight, std::ostream& os) const;
     void aPrefijo(const ExpressionNode* node, std::vector<std::string>& output) const;
-    void aPostfijo(const ExpressionNode* node, std::vector<std::string>& output) const;
+    void aposfix(const ExpressionNode* node, std::vector<std::string>& output) const;
     std::string generarSalidaConversion(const std::unique_ptr<ExpressionNode>& node, bool prefix) const;
     bool manejarComandoMostrar(std::istringstream& iss, std::ostream& os);
-    bool manejarComandoPrefijoPostfijo(const std::string& command, std::istringstream& iss, std::ostream& os);
+    bool manejarComandoPrefijoposfix(const std::string& command, std::istringstream& iss, std::ostream& os);
     bool manejarExpresion(const std::string& expression, std::ostream& os);
 };
 
